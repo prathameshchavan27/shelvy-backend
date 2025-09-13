@@ -1,0 +1,28 @@
+default: &default
+  adapter: postgresql
+  encoding: unicode
+  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+
+development:
+  <<: *default
+  database: shelvy_development
+  username: prathameshchavan
+  password: admin
+  host: localhost
+  port: 5432
+
+test:
+  <<: *default
+  database: shelvy_test
+  username: prathameshchavan
+  password: admin
+  host: localhost
+  port: 5432
+
+production:
+  <<: *default
+  database: shelvy_production
+  username: <%= ENV["SHELVY_DATABASE_USERNAME"] %>
+  password: <%= ENV["SHELVY_DATABASE_PASSWORD"] %>
+  host: <%= ENV["SHELVY_DATABASE_HOST"] %>
+  port: 5432
