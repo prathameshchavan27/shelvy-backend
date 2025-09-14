@@ -1,6 +1,6 @@
 source "https://rubygems.org"
 
-# ruby "3.3.0" # Specify the Ruby version
+ruby "3.3.0" # Specify the Ruby version
 
 # Core Rails
 gem "rails", "~> 7.2.2", ">= 7.2.2.1"
