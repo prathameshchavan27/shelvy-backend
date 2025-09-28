@@ -17,6 +17,7 @@ gem "rack-cors"
 # Authentication & Authorization
 gem "devise"             # For authentication
 gem "devise-jwt"         # JWT-based auth for API-only apps
+gem "jsonapi-serializer"    # JSON serialization for Devise
 gem "cancancan"          # Authorization (role-based permissions)
 
 # Background Jobs (Sidekiq)
@@ -32,7 +33,7 @@ gem "active_model_serializers" # Or use `blueprinter` if you prefer
 gem "kaminari"
 
 # UUID support for primary keys
-gem "pgcrypto", "~> 0.1.0"
+# gem "pgcrypto", "~> 0.1.0"
 
 # ENV configuration
 gem "dotenv-rails", groups: [ :development, :test ]
@@ -77,6 +78,7 @@ group :development, :test do
   # Annotate models with schema comments
   gem "annotate"
 
+  gem "shoulda-matchers"
   # Pry for debugging in console
   gem "pry-rails"
 end
