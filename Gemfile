@@ -47,6 +47,8 @@ gem "tzinfo-data", platforms: %i[windows jruby]
 # Performance boost
 gem "bootsnap", require: false
 
+gem "pundit"
+
 # -------------------
 # Development & Test
 # -------------------
@@ -86,8 +88,7 @@ end
 # -------------------
 # Test only
 # -------------------
-group :test do
-  gem "shoulda-matchers"      # Extra matchers for RSpec
+group :test do      # Extra matchers for RSpec
   gem "simplecov", require: false # Code coverage reports
 end
 
