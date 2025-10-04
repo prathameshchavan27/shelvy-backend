@@ -10,9 +10,20 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_09_30_141517) do
+ActiveRecord::Schema[7.2].define(version: 2025_10_04_072740) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "bundled_products", force: :cascade do |t|
+    t.bigint "bundle_id", null: false
+    t.bigint "component_id", null: false
+    t.integer "quantity", default: 1, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["bundle_id", "component_id"], name: "index_bundled_products_on_bundle_id_and_component_id", unique: true
+    t.index ["bundle_id"], name: "index_bundled_products_on_bundle_id"
+    t.index ["component_id"], name: "index_bundled_products_on_component_id"
+  end
 
   create_table "products", force: :cascade do |t|
     t.string "sku"
@@ -44,5 +55,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_09_30_141517) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  add_foreign_key "bundled_products", "products", column: "bundle_id"
+  add_foreign_key "bundled_products", "products", column: "component_id"
   add_foreign_key "products", "users", column: "created_by_user_id"
 end
