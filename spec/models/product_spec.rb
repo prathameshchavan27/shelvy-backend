@@ -2,7 +2,8 @@ require 'rails_helper'
 
 RSpec.describe Product, type: :model do
   let(:user) { User.create!(name: "Test User", email: "test@example.com", password: "password") }
-
+  let(:warehouse) { Warehouse.create!(name: "Main Warehouse", address: "1234 Main St") }
+  let(:location) { InventoryLocation.create!(storage_id: "LOC-001", capacity: 100, warehouse: warehouse) }
   subject do
     described_class.new(
       name: "Sample Product",
@@ -10,7 +11,8 @@ RSpec.describe Product, type: :model do
       price: 100.50,
       is_bundle: false,
       metadata: { color: "red" },
-      created_by_user: user
+      created_by_user: user,
+      inventory_location: location
     )
   end
 
@@ -54,7 +56,8 @@ RSpec.describe Product, type: :model do
         name: "Coffee",
         price: 10,
         is_bundle: false,
-        created_by_user: user
+        created_by_user: user,
+        inventory_location: location
       )
       expect(product.sku.length).to eq(8)
       expect(product.sku).to match(/[A-Z0-9]{8}/)
@@ -66,7 +69,8 @@ RSpec.describe Product, type: :model do
         name: "Coffee",
         price: 10,
         is_bundle: false,
-        created_by_user: user
+        created_by_user: user,
+        inventory_location: location
       )
 
       # Second product with same name should fail
@@ -74,7 +78,8 @@ RSpec.describe Product, type: :model do
         name: "Coffee",
         price: 15,
         is_bundle: false,
-        created_by_user: user
+        created_by_user: user,
+        inventory_location: location
       )
 
       expect(second).not_to be_valid

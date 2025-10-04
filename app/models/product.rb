@@ -26,7 +26,7 @@ class Product < ApplicationRecord
     base_sku = prefix + last_letter
 
     if Product.exists?(sku: base_sku)
-      errors.add(:base, "Product with this name or SKU #{base_sku} already exists")
+      errors.add(:base, "Product with this name or SKU already exists")
       throw(:abort)  # <---- stops creation
     end
 
