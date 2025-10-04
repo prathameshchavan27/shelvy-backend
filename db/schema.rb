@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_10_04_072740) do
+ActiveRecord::Schema[7.2].define(version: 2025_10_04_152514) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -25,6 +25,16 @@ ActiveRecord::Schema[7.2].define(version: 2025_10_04_072740) do
     t.index ["component_id"], name: "index_bundled_products_on_component_id"
   end
 
+  create_table "inventory_locations", force: :cascade do |t|
+    t.string "storage_id"
+    t.integer "unique_item_limits"
+    t.integer "capacity", default: 100
+    t.bigint "warehouse_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["warehouse_id"], name: "index_inventory_locations_on_warehouse_id"
+  end
+
   create_table "products", force: :cascade do |t|
     t.string "sku"
     t.string "name"
@@ -35,7 +45,9 @@ ActiveRecord::Schema[7.2].define(version: 2025_10_04_072740) do
     t.bigint "created_by_user_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "inventory_location_id", null: false
     t.index ["created_by_user_id"], name: "index_products_on_created_by_user_id"
+    t.index ["inventory_location_id"], name: "index_products_on_inventory_location_id"
     t.index ["sku"], name: "index_products_on_sku", unique: true
   end
 
@@ -55,7 +67,16 @@ ActiveRecord::Schema[7.2].define(version: 2025_10_04_072740) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  create_table "warehouses", force: :cascade do |t|
+    t.string "name", null: false
+    t.string "address", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   add_foreign_key "bundled_products", "products", column: "bundle_id"
   add_foreign_key "bundled_products", "products", column: "component_id"
+  add_foreign_key "inventory_locations", "warehouses"
+  add_foreign_key "products", "inventory_locations"
   add_foreign_key "products", "users", column: "created_by_user_id"
 end
