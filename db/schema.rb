@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_10_04_152514) do
+ActiveRecord::Schema[7.2].define(version: 2025_10_05_103610) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -33,6 +33,28 @@ ActiveRecord::Schema[7.2].define(version: 2025_10_04_152514) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["warehouse_id"], name: "index_inventory_locations_on_warehouse_id"
+  end
+
+  create_table "inventory_movements", force: :cascade do |t|
+    t.bigint "inventory_summary_id", null: false
+    t.integer "transfer_from_id"
+    t.integer "transfer_to_id"
+    t.integer "quantity_moved"
+    t.integer "bundle_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["inventory_summary_id"], name: "index_inventory_movements_on_inventory_summary_id"
+  end
+
+  create_table "inventory_summaries", force: :cascade do |t|
+    t.bigint "product_id", null: false
+    t.bigint "inventory_location_id", null: false
+    t.integer "quantity_on_hand"
+    t.integer "reserved_quantity"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["inventory_location_id"], name: "index_inventory_summaries_on_inventory_location_id"
+    t.index ["product_id"], name: "index_inventory_summaries_on_product_id"
   end
 
   create_table "products", force: :cascade do |t|
@@ -77,6 +99,12 @@ ActiveRecord::Schema[7.2].define(version: 2025_10_04_152514) do
   add_foreign_key "bundled_products", "products", column: "bundle_id"
   add_foreign_key "bundled_products", "products", column: "component_id"
   add_foreign_key "inventory_locations", "warehouses"
+  add_foreign_key "inventory_movements", "inventory_locations", column: "transfer_from_id"
+  add_foreign_key "inventory_movements", "inventory_locations", column: "transfer_to_id"
+  add_foreign_key "inventory_movements", "inventory_summaries"
+  add_foreign_key "inventory_movements", "products", column: "bundle_id"
+  add_foreign_key "inventory_summaries", "inventory_locations"
+  add_foreign_key "inventory_summaries", "products"
   add_foreign_key "products", "inventory_locations"
   add_foreign_key "products", "users", column: "created_by_user_id"
 end
