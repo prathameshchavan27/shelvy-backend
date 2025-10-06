@@ -14,6 +14,7 @@ class Product < ApplicationRecord
   has_many :bundles, through: :inverse_bundled_products, source: :bundle
   belongs_to :inventory_location
 
+
   private
 
   def generate_sku

@@ -1,6 +1,7 @@
 class InventorySummary < ApplicationRecord
   belongs_to :product
   belongs_to :inventory_location
+  belongs_to :inventory_status
 
   validates :product, presence: true
   validates :inventory_location, presence: true
