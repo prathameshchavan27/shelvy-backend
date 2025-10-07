@@ -21,7 +21,7 @@ class Product < ApplicationRecord
     return if sku.present?
     return if name.blank?
 
-    letters = name.gsub(/[^A-Za-z]/, "").upcase.chars.sort
+    letters = name.gsub(/[^A-Za-z0-9]/, "").upcase.chars.sort
     last_letter = letters.pop || "X"
     prefix = letters.first(7).join.ljust(7, "0")
     base_sku = prefix + last_letter

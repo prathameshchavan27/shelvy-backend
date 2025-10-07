@@ -7,4 +7,10 @@ Rails.application.routes.draw do
     sessions: "api/v1/users/sessions",
     registrations: "api/v1/users/registrations"
   }
+
+  namespace :api do
+    namespace :v1 do
+      resources :products, only: [ :index ]
+    end
+  end
 end
