@@ -14,6 +14,39 @@ paths:
       responses:
         '200':
           description: successful
+    post:
+      summary: Create a product
+      tags:
+      - Products
+      security:
+      - bearerAuth: []
+      parameters: []
+      responses:
+        '201':
+          description: created
+        '422':
+          description: unprocessable entity
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                product:
+                  type: object
+                  properties:
+                    name:
+                      type: string
+                    price:
+                      type: number
+                    inventory_location_id:
+                      type: integer
+                  required:
+                  - name
+                  - price
+                  - inventory_location_id
+              required:
+              - product
   "/api/v1/products/{id}":
     get:
       summary: Show a product
@@ -40,7 +73,7 @@ paths:
       - Authentication
       parameters: []
       responses:
-        '200':
+        '201':
           description: User registered successfully
         '400':
           description: Validation error

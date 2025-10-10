@@ -12,7 +12,7 @@ class Product < ApplicationRecord
 
   has_many :inverse_bundled_products, class_name: "BundledProduct", foreign_key: :component_id, dependent: :destroy
   has_many :bundles, through: :inverse_bundled_products, source: :bundle
-  belongs_to :inventory_location
+  belongs_to :inventory_location,
 
 
   private

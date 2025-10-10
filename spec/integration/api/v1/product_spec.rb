@@ -41,4 +41,66 @@ RSpec.describe 'API::V1::Products', type: :request do
       end
     end
   end
+
+  path '/api/v1/products' do
+    post('Create a product') do
+      tags 'Products'
+      consumes 'application/json'
+      produces 'application/json'
+      security [ bearerAuth: [] ]
+
+      parameter name: :product, in: :body, schema: {
+        type: :object,
+        properties: {
+          product: {
+            type: :object,
+            properties: {
+              name: { type: :string },
+              price: { type: :number },
+              inventory_location_id: { type: :integer }
+            },
+            required: %w[name price inventory_location_id]
+          }
+        },
+        required: [ 'product' ]
+      }
+
+      response(201, 'created') do
+        let(:Authorization) { auth_token }
+        let(:product) do
+          {
+            product: {
+              name: 'Coca Cola',
+              price: 15,
+              inventory_location_id: inventory_location.id
+            }
+          }
+        end
+
+        run_test! do |response|
+          expect(response).to have_http_status(:created)
+          json = JSON.parse(response.body)
+          puts "Response body: #{response.body}"
+          expect(json["product"]['name']).to eq('Coca Cola')
+          expect(json["product"]['price']).to eq("15.0")
+        end
+      end
+
+      response(422, 'unprocessable entity') do
+        let(:Authorization) { auth_token }
+        let(:product) do
+          {
+            product: {
+              name: '',
+              price: nil
+            }
+          }
+        end
+
+        run_test! do |response|
+          expect(response).to have_http_status(:unprocessable_entity)
+        end
+      end
+    end
+  end
 end
