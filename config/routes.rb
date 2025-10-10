@@ -1,4 +1,7 @@
 Rails.application.routes.draw do
+  mount Rswag::Ui::Engine => "/api-docs"
+  mount Rswag::Api::Engine => "/api-docs"
+
   devise_for :users, path: "api/v1/", path_names: {
     sign_in: "login",
     sign_out: "logout",
@@ -10,7 +13,7 @@ Rails.application.routes.draw do
 
   namespace :api do
     namespace :v1 do
-      resources :products, only: [ :index ]
+      resources :products, only: [ :index, :show ]
     end
   end
 end
