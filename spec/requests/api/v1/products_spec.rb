@@ -82,4 +82,29 @@ RSpec.describe "Api::V1::Products", type: :request do
       end
     end
   end
+
+  describe "POST /create" do
+    context "when user is admin or manager" do
+      let(:valid_params) do
+        {
+          product: {
+            name: "Diet Coke",
+            price: 10,
+            inventory_location_id: bin1.id
+          }
+        }.to_json
+      end
+
+      it "creates a new product" do
+        post "/api/v1/products",
+            headers: auth_headers(admin).merge({ "CONTENT_TYPE" => "application/json", "ACCEPT" => "application/json" }),
+            params: valid_params
+
+        puts "Response body****: #{response.body}"
+        expect(response).to have_http_status(:created)
+        json = JSON.parse(response.body)
+        expect(json["product"]["name"]).to eq("Diet Coke")
+      end
+    end
+  end
 end

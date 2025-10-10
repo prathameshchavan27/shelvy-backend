@@ -39,7 +39,24 @@ class Api::V1::ProductsController < ApplicationController
         }, status: :ok
     end
 
+    def create
+        authorize Product
+        @product = Product.new(product_params)
+        @product.created_by_user = current_user
+
+        if @product.save
+            render json: { product: @product }, status: :created
+        else
+            render json: { errors: @product.errors.full_messages }, status: :unprocessable_entity
+        end
+    end
+
     private
+
+    def product_params
+        params.require(:product).permit(:name, :price, :inventory_location_id)
+    end
+
     def set_product
         @product = Product.find(params[:id])
     rescue ActiveRecord::RecordNotFound
