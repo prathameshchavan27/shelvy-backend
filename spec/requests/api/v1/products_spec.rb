@@ -56,4 +56,30 @@ RSpec.describe "Api::V1::Products", type: :request do
       end
     end
   end
+
+  describe "GET /show" do
+    context "when user is authenticated" do
+      it "returns the product details" do
+        get "/api/v1/products/#{coffee.id}", headers: auth_headers(admin)
+        expect(response).to have_http_status(:ok)
+        json = JSON.parse(response.body)
+        expect(json["name"]).to eq("Coffee")
+        expect(json["price"]).to eq("10.0")
+      end
+
+      it "returns 404 for non-existent product" do
+        get "/api/v1/products/9999", headers: auth_headers(admin)
+        expect(response).to have_http_status(:not_found)
+        json = JSON.parse(response.body)
+        expect(json["error"]).to eq("Product not found")
+      end
+    end
+
+    context "when user is unauthenticated" do
+      it "returns 401 unauthorized" do
+        get "/api/v1/products/#{coffee.id}"
+        expect(response).to have_http_status(:unauthorized)
+      end
+    end
+  end
 end

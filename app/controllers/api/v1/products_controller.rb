@@ -1,5 +1,6 @@
 class Api::V1::ProductsController < ApplicationController
     before_action :authenticate_user!
+    before_action :set_product, only: [ :show ]
 
     def index
         authorize Product
@@ -8,6 +9,7 @@ class Api::V1::ProductsController < ApplicationController
         render json: @products.map { |product|
             base = {
                 id: product.id,
+                sku: product.sku,
                 name: product.name,
                 price: product.price,
                 is_bundle: product.is_bundle,
@@ -24,5 +26,23 @@ class Api::V1::ProductsController < ApplicationController
             end
             base
         }
+    end
+
+    def show
+        authorize Product
+        render json: {
+            id: @product.id,
+            sku: @product.sku,
+            name: @product.name,
+            description: @product.description,
+            price: @product.price
+        }, status: :ok
+    end
+
+    private
+    def set_product
+        @product = Product.find(params[:id])
+    rescue ActiveRecord::RecordNotFound
+        render json: { error: "Product not found" }, status: :not_found
     end
 end

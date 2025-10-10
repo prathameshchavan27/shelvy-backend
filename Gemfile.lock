@@ -439,6 +439,9 @@ DEPENDENCIES
   rails (~> 7.2.2, >= 7.2.2.1)
   rspec-rails
   rswag
+  rswag-api
+  rswag-specs
+  rswag-ui
   rubocop-rails-omakase
   shoulda-matchers
   sidekiq

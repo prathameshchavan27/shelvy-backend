@@ -83,6 +83,10 @@ group :development, :test do
   gem "shoulda-matchers"
   # Pry for debugging in console
   gem "pry-rails"
+
+  gem "rswag-api"
+  gem "rswag-ui"
+  gem "rswag-specs"
 end
 
 # -------------------
