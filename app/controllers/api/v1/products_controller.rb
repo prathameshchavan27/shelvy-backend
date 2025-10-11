@@ -12,8 +12,7 @@ class Api::V1::ProductsController < ApplicationController
                 sku: product.sku,
                 name: product.name,
                 price: product.price,
-                is_bundle: product.is_bundle,
-                inventory_location_id: product.inventory_location_id
+                is_bundle: product.is_bundle
             }
             if product.is_bundle?
                 base[:components] = product.components.map do |component|
@@ -54,7 +53,7 @@ class Api::V1::ProductsController < ApplicationController
     private
 
     def product_params
-        params.require(:product).permit(:name, :price, :inventory_location_id)
+        params.require(:product).permit(:name, :price)
     end
 
     def set_product

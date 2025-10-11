@@ -11,8 +11,7 @@ RSpec.describe Product, type: :model do
       price: 100.50,
       is_bundle: false,
       metadata: { color: "red" },
-      created_by_user: user,
-      inventory_location: location
+      created_by_user: user
     )
   end
 
@@ -56,8 +55,7 @@ RSpec.describe Product, type: :model do
         name: "Coffee",
         price: 10,
         is_bundle: false,
-        created_by_user: user,
-        inventory_location: location
+        created_by_user: user
       )
       expect(product.sku.length).to eq(8)
       expect(product.sku).to match(/[A-Z0-9]{8}/)
@@ -69,8 +67,7 @@ RSpec.describe Product, type: :model do
         name: "Coffee",
         price: 10,
         is_bundle: false,
-        created_by_user: user,
-        inventory_location: location
+        created_by_user: user
       )
 
       # Second product with same name should fail
@@ -78,8 +75,7 @@ RSpec.describe Product, type: :model do
         name: "Coffee",
         price: 15,
         is_bundle: false,
-        created_by_user: user,
-        inventory_location: location
+        created_by_user: user
       )
 
       expect(second).not_to be_valid

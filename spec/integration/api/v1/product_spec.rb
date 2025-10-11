@@ -30,7 +30,7 @@ RSpec.describe 'API::V1::Products', type: :request do
 
       response(200, 'successful') do
         let(:Authorization) { auth_token }
-        let(:id) { Product.create!(name: 'Coffee', price: 10, created_by_user: admin, inventory_location: inventory_location).id }
+        let(:id) { Product.create!(name: 'Coffee', price: 10, created_by_user: admin).id }
         run_test!
       end
 
@@ -56,8 +56,7 @@ RSpec.describe 'API::V1::Products', type: :request do
             type: :object,
             properties: {
               name: { type: :string },
-              price: { type: :number },
-              inventory_location_id: { type: :integer }
+              price: { type: :number }
             },
             required: %w[name price inventory_location_id]
           }
@@ -71,8 +70,7 @@ RSpec.describe 'API::V1::Products', type: :request do
           {
             product: {
               name: 'Coca Cola',
-              price: 15,
-              inventory_location_id: inventory_location.id
+              price: 15
             }
           }
         end

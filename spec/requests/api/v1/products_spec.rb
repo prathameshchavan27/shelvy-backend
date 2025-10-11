@@ -8,11 +8,11 @@ RSpec.describe "Api::V1::Products", type: :request do
   let(:warehouse) { Warehouse.create!(name: "Main Warehouse", address: "123 Street") }
   let(:bin1) { InventoryLocation.create!(storage_id: "BIN-01", warehouse: warehouse, capacity: 100, unique_item_limits: 5) }
 
-  let!(:coffee) { Product.create!(name: "Coffee", price: 10, created_by_user: admin, inventory_location: bin1) }
-  let!(:tea) { Product.create!(name: "Tea", price: 8, created_by_user: admin, inventory_location: bin1) }
+  let!(:coffee) { Product.create!(name: "Coffee", price: 10, created_by_user: admin) }
+  let!(:tea) { Product.create!(name: "Tea", price: 8, created_by_user: admin) }
 
   # Bundle example
-  let!(:coffee_tea_bundle) { Product.create!(name: "Coffee & Tea Bundle", price: 17, is_bundle: true, created_by_user: admin, inventory_location: bin1) }
+  let!(:coffee_tea_bundle) { Product.create!(name: "Coffee & Tea Bundle", price: 17, is_bundle: true, created_by_user: admin) }
   let!(:bundle_relation) { BundledProduct.create!(bundle: coffee_tea_bundle, component: coffee, quantity: 1) }
   let!(:bundle_relation2) { BundledProduct.create!(bundle: coffee_tea_bundle, component: tea, quantity: 1) }
 
@@ -89,8 +89,7 @@ RSpec.describe "Api::V1::Products", type: :request do
         {
           product: {
             name: "Diet Coke",
-            price: 10,
-            inventory_location_id: bin1.id
+            price: 10
           }
         }.to_json
       end
