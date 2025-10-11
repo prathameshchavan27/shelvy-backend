@@ -1,6 +1,7 @@
 class InventoryLocation < ApplicationRecord
   belongs_to :warehouse
-  has_many :products, dependent: :nullify
+  has_many :inventory_summaries, dependent: :destroy
+  has_many :products, through: :inventory_summaries
 
   validates :storage_id, presence: true
   validates :unique_item_limits, numericality: { only_integer: true, greater_than: 0 }, allow_nil: true

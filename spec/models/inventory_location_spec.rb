@@ -15,7 +15,8 @@ RSpec.describe InventoryLocation, type: :model do
 
   describe "associations" do
     it { should belong_to(:warehouse) }
-    it { should have_many(:products).dependent(:nullify) }
+    it { should have_many(:inventory_summaries).dependent(:destroy) }
+    it { should have_many(:products).through(:inventory_summaries) }
   end
 
   describe "validations" do
@@ -57,21 +58,6 @@ RSpec.describe InventoryLocation, type: :model do
     it "is valid if unique_item_limits is nil (optional)" do
       subject.unique_item_limits = nil
       expect(subject).to be_valid
-    end
-
-    it "does not allow more unique products than unique_item_limits" do
-      # Add 2 unique products → OK
-      p1 = Product.create!(name: "Laptop", price: 10, created_by_user: user, inventory_location: subject)
-      p2 = Product.create!(name: "Tea", price: 20, created_by_user: user, inventory_location: subject)
-      p3 = Product.create!(name: "Watch", price: 10, created_by_user: user, inventory_location: subject)
-      p4 = Product.create!(name: "Bag", price: 20, created_by_user: user, inventory_location: subject)
-      p5 = Product.create!(name: "Hoodie", price: 10, created_by_user: user, inventory_location: subject)
-      expect(subject.reload).to be_valid
-
-      # Try to add a 3rd unique product → should fail
-      p6 = Product.new(name: "Shoes", price: 30, created_by_user: user, inventory_location: subject)
-      expect(p6.save).to be false
-      expect(p6.errors[:inventory_location]).to include("has reached its unique product limit of 5")
     end
   end
 end

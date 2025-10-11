@@ -10,8 +10,8 @@ RSpec.describe BundledProduct, type: :model do
     let(:warehouse) { Warehouse.create!(name: "Main Warehouse", address: "1234 Main St") }
     let(:location) { InventoryLocation.create!(storage_id: "LOC-001", capacity: 100, warehouse: warehouse) }
     let(:user) { User.create!(name: "Test User", email: "test@example.com", password: "password") }
-    let(:bundle) { Product.create!(name: "Bundle Product", is_bundle: true, price: 10, created_by_user: user, inventory_location: location) }
-    let(:component) { Product.create!(name: "Component Product", is_bundle: false, price: 5, created_by_user: user, inventory_location: location) }
+    let(:bundle) { Product.create!(name: "Bundle Product", is_bundle: true, price: 10, created_by_user: user) }
+    let(:component) { Product.create!(name: "Component Product", is_bundle: false, price: 5, created_by_user: user) }
 
     it "is valid with bundle and component" do
       bundled_product = BundledProduct.new(bundle: bundle, component: component, quantity: 2)
@@ -24,13 +24,13 @@ RSpec.describe BundledProduct, type: :model do
     end
 
     it "is invalid if bundle is not a bundle product" do
-      not_a_bundle = Product.create!(name: "Not a Bundle", is_bundle: false, price: 5, created_by_user: user, inventory_location: location)
+      not_a_bundle = Product.create!(name: "Not a Bundle", is_bundle: false, price: 5, created_by_user: user)
       bundled_product = BundledProduct.new(bundle: not_a_bundle, component: component, quantity: 2)
       expect(bundled_product).not_to be_valid
     end
 
     it "is invalid if component is a bundle product" do
-      component = Product.create!(name: "Component Bundle", is_bundle: true, price: 15, created_by_user: user, inventory_location: location)
+      component = Product.create!(name: "Component Bundle", is_bundle: true, price: 15, created_by_user: user)
       bundled_product = BundledProduct.new(bundle: bundle, component: component, quantity: 2)
       expect(bundled_product).not_to be_valid
     end

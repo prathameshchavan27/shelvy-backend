@@ -6,7 +6,7 @@ RSpec.describe InventoryMovement, type: :model do
     let(:location1) { InventoryLocation.create!(storage_id: "BIN-01", warehouse: warehouse, capacity: 300) }
     let(:location2) { InventoryLocation.create!(storage_id: "BIN-02", warehouse: warehouse, capacity: 300) }
     let(:user) { User.create!(name: "User1", email: "a@b.com", password: "123456") }
-    let(:product) { Product.create!(name: "Coffee", price: 10, created_by_user: user, inventory_location: location1) }
+    let(:product) { Product.create!(name: "Coffee", price: 10, created_by_user: user) }
     let(:status) { InventoryStatus.create!(name: "Sellable") }
     let(:summary) { InventorySummary.create!(product: product, inventory_location: location1, inventory_status: status, quantity_on_hand: 10, reserved_quantity: 0) }
 

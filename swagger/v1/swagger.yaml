@@ -39,8 +39,6 @@ paths:
                       type: string
                     price:
                       type: number
-                    inventory_location_id:
-                      type: integer
                   required:
                   - name
                   - price

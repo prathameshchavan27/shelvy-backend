@@ -8,6 +8,8 @@ class InventorySummary < ApplicationRecord
   validates :quantity_on_hand, presence: true, numericality: { greater_than_or_equal_to: 0 }
   validates :reserved_quantity, numericality: { greater_than_or_equal_to: 0 }
   validate :reserved_cannot_exceed_on_hand
+  validates :inventory_status, presence: true
+
 
   private
   def reserved_cannot_exceed_on_hand

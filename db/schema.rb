@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_10_06_132727) do
+ActiveRecord::Schema[7.2].define(version: 2025_10_11_145958) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -76,9 +76,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_10_06_132727) do
     t.bigint "created_by_user_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.bigint "inventory_location_id", null: false
     t.index ["created_by_user_id"], name: "index_products_on_created_by_user_id"
-    t.index ["inventory_location_id"], name: "index_products_on_inventory_location_id"
     t.index ["sku"], name: "index_products_on_sku", unique: true
   end
 
@@ -115,6 +113,5 @@ ActiveRecord::Schema[7.2].define(version: 2025_10_06_132727) do
   add_foreign_key "inventory_summaries", "inventory_locations"
   add_foreign_key "inventory_summaries", "inventory_statuses"
   add_foreign_key "inventory_summaries", "products"
-  add_foreign_key "products", "inventory_locations"
   add_foreign_key "products", "users", column: "created_by_user_id"
 end
