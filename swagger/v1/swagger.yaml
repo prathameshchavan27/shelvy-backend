@@ -4,6 +4,43 @@ info:
   title: API V1
   version: v1
 paths:
+  "/api/v1/inventory_locations/by_warehouse":
+    get:
+      summary: Get inventory locations by warehouse
+      tags:
+      - InventoryLocations
+      security:
+      - bearerAuth: []
+      parameters:
+      - name: warehouse_id
+        in: query
+        description: Warehouse ID
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: successful
+        '400':
+          description: bad request
+  "/api/v1/inventory_locations/{id}":
+    get:
+      summary: Show inventory details for a location
+      tags:
+      - InventoryLocations
+      security:
+      - bearerAuth: []
+      parameters:
+      - name: id
+        in: path
+        description: Inventory Location ID
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: successful
+        '404':
+          description: not found
   "/api/v1/products":
     get:
       summary: List all products
