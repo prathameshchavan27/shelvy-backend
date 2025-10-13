@@ -58,11 +58,39 @@ RSpec.describe 'API::V1::Products', type: :request do
               name: { type: :string },
               price: { type: :number }
             },
-            required: %w[name price inventory_location_id]
+            required: %w[name price]
           }
         },
         required: [ 'product' ]
       }
+
+      response(201, 'bundle created') do
+        let(:Authorization) { auth_token }
+        let(:coffee) { Product.create!(name: "Coffee", price: 10, created_by_user: admin) }
+        let(:tea) { Product.create!(name: "Tea", price: 8, created_by_user: admin) }
+        let(:product) do
+          {
+            product: {
+              name: 'Breakfast Combo',
+              price: 25,
+              is_bundle: true,
+              component_ids: [ coffee.id, tea.id ],
+              components: [
+                { name: 'Muffin', price: 5 }
+              ]
+            }
+          }
+        end
+
+        run_test! do |response|
+          expect(response).to have_http_status(:created)
+          json = JSON.parse(response.body)
+          puts "Response body Bundle: #{response.body}"
+          expect(json["product"]['name']).to eq('Breakfast Combo')
+          expect(json["product"]['is_bundle']).to be true
+          expect(json["product"]["components"].size).to eq(3)
+        end
+      end
 
       response(201, 'created') do
         let(:Authorization) { auth_token }
