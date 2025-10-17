@@ -104,6 +104,17 @@ RSpec.describe "Api::V1::Products", type: :request do
         json = JSON.parse(response.body)
         expect(json["product"]["name"]).to eq("Diet Coke")
       end
+
+      it "logs a product creation action" do
+        expect {
+          post "/api/v1/products", params: valid_params, headers: auth_headers(admin)
+        }.to change { AuditLog.count }.by(1)
+
+        log = AuditLog.last
+        expect(log.action_type).to eq("CREATE")
+        expect(log.object_type).to eq("Product")
+        expect(log.user).to eq(admin)
+      end
     end
   end
 end

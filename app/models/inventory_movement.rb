@@ -1,4 +1,5 @@
 class InventoryMovement < ApplicationRecord
+  include Auditable
   belongs_to :inventory_summary
   belongs_to :transfer_from, class_name: "InventoryLocation", optional: true
   belongs_to :transfer_to, class_name: "InventoryLocation", optional: true

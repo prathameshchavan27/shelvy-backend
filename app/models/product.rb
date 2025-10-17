@@ -1,4 +1,5 @@
 class Product < ApplicationRecord
+  include Auditable
   before_validation :generate_sku, on: :create
   belongs_to :created_by_user, class_name: "User"
 
