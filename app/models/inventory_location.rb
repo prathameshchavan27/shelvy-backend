@@ -1,4 +1,5 @@
 class InventoryLocation < ApplicationRecord
+  include Auditable
   belongs_to :warehouse
   has_many :inventory_summaries, dependent: :destroy
   has_many :products, through: :inventory_summaries

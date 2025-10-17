@@ -1,4 +1,5 @@
 class InventorySummary < ApplicationRecord
+  include Auditable
   belongs_to :product
   belongs_to :inventory_location
   belongs_to :inventory_status
