@@ -1,16 +1,17 @@
 class Api::V1::ProductsController < ApplicationController
     before_action :authenticate_user!
-    before_action :set_product, only: [ :show ]
+    before_action :set_product, only: [ :show, :update ]
 
     def index
         authorize Product
-        @products = Product.all.includes(:components)
+        @products = Product.order(:id).includes(:components)
 
         render json: @products.map { |product|
             base = {
                 id: product.id,
                 sku: product.sku,
                 name: product.name,
+                description: product.description,
                 price: product.price,
                 is_bundle: product.is_bundle
             }
@@ -93,11 +94,24 @@ class Api::V1::ProductsController < ApplicationController
         render json: { product: response_data }, status: :created
     end
 
+    def update
+        authorize Product
+        if product_params.key?(:is_bundle)
+            render json: { error: "Cannot change is_bundle attribute on update" }, status: :unprocessable_entity
+            return
+        end
+        if @product.update(product_params)
+            render json: { product: @product }, status: :ok
+        else
+            render json: { errors: @product.errors.full_messages }, status: :unprocessable_entity
+        end
+    end
+
     private
 
     def product_params
         # Only permit fields directly on Product
-        params.require(:product).permit(:name, :price, :is_bundle)
+        params.require(:product).permit(:name, :description, :price, :is_bundle)
     end
 
 

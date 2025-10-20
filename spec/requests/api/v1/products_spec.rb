@@ -96,7 +96,7 @@ RSpec.describe "Api::V1::Products", type: :request do
 
       it "creates a new product" do
         post "/api/v1/products",
-            headers: auth_headers(admin).merge({ "CONTENT_TYPE" => "application/json", "ACCEPT" => "application/json" }),
+            headers: auth_headers(admin),
             params: valid_params
 
         puts "Response body****: #{response.body}"
@@ -114,6 +114,46 @@ RSpec.describe "Api::V1::Products", type: :request do
         expect(log.action_type).to eq("CREATE")
         expect(log.object_type).to eq("Product")
         expect(log.user).to eq(admin)
+      end
+    end
+  end
+
+  describe "PATCH /update" do
+    context "when user is admin or manager" do
+      let(:update_params) do
+        {
+          product: {
+            name: "Updated Coffee",
+            price: 12
+          }
+        }.to_json
+      end
+
+      it "updates an existing product" do
+        patch "/api/v1/products/#{coffee.id}",
+              headers: auth_headers(admin),
+              params: update_params
+
+        expect(response).to have_http_status(:ok)
+        json = JSON.parse(response.body)
+        expect(json["product"]["name"]).to eq("Updated Coffee")
+        expect(json["product"]["price"]).to eq("12.0")
+      end
+
+      it "does not allow changing is_bundle attribute" do
+        bundle_update_params = {
+          product: {
+            is_bundle: true
+          }
+        }.to_json
+
+        patch "/api/v1/products/#{coffee.id}",
+              headers: auth_headers(admin),
+              params: bundle_update_params
+
+        expect(response).to have_http_status(:unprocessable_entity)
+        json = JSON.parse(response.body)
+        expect(json["error"]).to eq("Cannot change is_bundle attribute on update")
       end
     end
   end

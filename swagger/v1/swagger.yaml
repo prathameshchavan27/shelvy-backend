@@ -79,7 +79,6 @@ paths:
                   required:
                   - name
                   - price
-                  - inventory_location_id
               required:
               - product
   "/api/v1/products/{id}":
@@ -101,6 +100,37 @@ paths:
           description: successful
         '404':
           description: not found
+    patch:
+      summary: Update a product
+      tags:
+      - Products
+      security:
+      - bearerAuth: []
+      parameters:
+      - name: id
+        in: path
+        description: Product ID
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: updated
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                product:
+                  type: object
+                  properties:
+                    name:
+                      type: string
+                    price:
+                      type: number
+              required:
+              - product
   "/api/v1/signup":
     post:
       summary: Registers a new user

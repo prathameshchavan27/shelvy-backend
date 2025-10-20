@@ -129,4 +129,48 @@ RSpec.describe 'API::V1::Products', type: :request do
       end
     end
   end
+  path '/api/v1/products/{id}' do
+    patch('Update a product') do
+      tags 'Products'
+      consumes 'application/json'
+      produces 'application/json'
+      security [ bearerAuth: [] ]
+      parameter name: :id, in: :path, type: :string, description: 'Product ID'
+      parameter name: :product, in: :body, schema: {
+        type: :object,
+        properties: {
+          product: {
+            type: :object,
+            properties: {
+              name: { type: :string },
+              price: { type: :number }
+            }
+          }
+        },
+        required: [ 'product' ]
+      }
+
+      response(200, 'updated') do
+        let(:Authorization) { auth_token }
+        let(:coffee) { Product.create!(name: "Coffee", price: 10, created_by_user: admin) }
+        let(:id) { coffee.id }
+        let(:product) do
+          {
+            product: {
+              name: 'Updated Coffee',
+              price: 12
+            }
+          }
+        end
+
+        run_test! do |response|
+          expect(response).to have_http_status(:ok)
+          json = JSON.parse(response.body)
+          puts "Response body Update: #{response.body}"
+          expect(json["product"]['name']).to eq('Updated Coffee')
+          expect(json["product"]['price']).to eq("12.0")
+        end
+      end
+    end
+  end
 end
