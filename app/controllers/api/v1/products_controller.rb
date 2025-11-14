@@ -6,37 +6,12 @@ class Api::V1::ProductsController < ApplicationController
         authorize Product
         @products = Product.order(:id).includes(:components)
 
-        render json: @products.map { |product|
-            base = {
-                id: product.id,
-                sku: product.sku,
-                name: product.name,
-                description: product.description,
-                price: product.price,
-                is_bundle: product.is_bundle
-            }
-            if product.is_bundle?
-                base[:components] = product.components.map do |component|
-                {
-                    id: component.id,
-                    name: component.name,
-                    price: component.price
-                }
-                end
-            end
-            base
-        }
+        render "api/v1/products/index", formats: :json, status: :ok
     end
 
     def show
         authorize Product
-        render json: {
-            id: @product.id,
-            sku: @product.sku,
-            name: @product.name,
-            description: @product.description,
-            price: @product.price
-        }, status: :ok
+        render "api/v1/products/show", formats: :json, status: :ok
     end
 
     def create

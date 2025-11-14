@@ -49,6 +49,8 @@ gem "bootsnap", require: false
 
 gem "pundit"
 
+gem "jbuilder"
+
 # -------------------
 # Development & Test
 # -------------------
