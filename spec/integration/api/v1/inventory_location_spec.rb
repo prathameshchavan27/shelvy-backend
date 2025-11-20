@@ -37,9 +37,10 @@ RSpec.describe 'API::V1::InventoryLocations', type: :request do
         run_test! do |response|
           expect(response).to have_http_status(:ok)
           json = JSON.parse(response.body)
-          expect(json.length).to eq(2)
-          expect(json.first).to have_key('id')
-          expect(json.first).to have_key('storage_id')
+          expect(json["locations"].length).to eq(2)
+          puts "JSON Response: #{json}"
+          expect(json["locations"].first).to have_key('id')
+          expect(json["locations"].first).to have_key('storage_id')
         end
       end
 

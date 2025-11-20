@@ -14,8 +14,11 @@ RSpec.describe 'API::V1::Products', type: :request do
       produces 'application/json'
       security [ bearerAuth: [] ]
 
+      parameter name: 'Accept', in: :header, type: :string, required: true, default: 'application/json'
+
       response(200, 'successful') do
         let(:Authorization) { auth_token }
+        let(:Accept) { 'application/json' }
         run_test!
       end
     end
@@ -26,21 +29,28 @@ RSpec.describe 'API::V1::Products', type: :request do
       tags 'Products'
       produces 'application/json'
       security [ bearerAuth: [] ]
-      parameter name: :id, in: :path, type: :string, description: 'Product ID'
+
+      parameter name: :id, in: :path, type: :string
+      parameter name: 'Accept', in: :header, type: :string, required: true
 
       response(200, 'successful') do
         let(:Authorization) { auth_token }
+        let(:Accept) { 'application/json' }
         let(:id) { Product.create!(name: 'Coffee', price: 10, created_by_user: admin).id }
+
         run_test!
       end
 
       response(404, 'not found') do
         let(:Authorization) { auth_token }
+        let(:Accept) { 'application/json' }
         let(:id) { '999' }
+
         run_test!
       end
     end
   end
+
 
   path '/api/v1/products' do
     post('Create a product') do

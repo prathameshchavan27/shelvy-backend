@@ -19,6 +19,7 @@ Rails.application.routes.draw do
           get "by_warehouse", to: "inventory_locations#inventory_locations_by_warehouse"
         end
       end
+      resources :warehouses, only: [ :index, :show ]
     end
   end
 end

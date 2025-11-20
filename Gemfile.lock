@@ -175,6 +175,9 @@ GEM
       pp (>= 0.6.0)
       rdoc (>= 4.0.0)
       reline (>= 0.4.2)
+    jbuilder (2.14.1)
+      actionview (>= 7.0.0)
+      activesupport (>= 7.0.0)
     jmespath (1.6.2)
     json (2.13.2)
     json-schema (5.2.2)
@@ -428,6 +431,7 @@ DEPENDENCIES
   dotenv-rails
   factory_bot_rails
   faker
+  jbuilder
   jsonapi-serializer
   kaminari
   pg (~> 1.5)
