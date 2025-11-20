@@ -48,6 +48,13 @@ paths:
       - Products
       security:
       - bearerAuth: []
+      parameters:
+      - name: Accept
+        in: header
+        required: true
+        default: application/json
+        schema:
+          type: string
       responses:
         '200':
           description: successful
@@ -91,7 +98,11 @@ paths:
       parameters:
       - name: id
         in: path
-        description: Product ID
+        required: true
+        schema:
+          type: string
+      - name: Accept
+        in: header
         required: true
         schema:
           type: string
@@ -196,6 +207,39 @@ paths:
               required:
               - email
               - password
+  "/api/v1/warehouses":
+    get:
+      summary: List warehouses
+      tags:
+      - Warehouses
+      security:
+      - bearerAuth: []
+      responses:
+        '200':
+          description: successful
+        '401':
+          description: unauthorized
+  "/api/v1/warehouses/{id}":
+    parameters:
+    - name: id
+      in: path
+      description: Warehouse ID
+      required: true
+      schema:
+        type: integer
+    get:
+      summary: Show warehouse
+      tags:
+      - Warehouses
+      security:
+      - bearerAuth: []
+      responses:
+        '200':
+          description: successful
+        '404':
+          description: not found
+        '401':
+          description: unauthorized
 components:
   securitySchemes:
     bearerAuth:

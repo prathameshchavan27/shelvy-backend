@@ -26,9 +26,9 @@ RSpec.describe "API::V1::InventoryLocations", type: :request do
 
         expect(response).to have_http_status(:ok)
         json = JSON.parse(response.body)
-        expect(json).to be_an(Array)
-        expect(json.size).to eq(2)
-        expect(json.first.keys).to include("id", "storage_id")
+        expect(json["locations"]).to be_an(Array)
+        expect(json["locations"].size).to eq(2)
+        expect(json["locations"].first.keys).to include("id", "storage_id")
       end
     end
 
