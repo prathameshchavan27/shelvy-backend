@@ -108,7 +108,7 @@ GEM
     bigdecimal (3.2.3)
     bootsnap (1.18.6)
       msgpack (~> 1.2)
-    brakeman (7.1.0)
+    brakeman (7.1.1)
       racc
     builder (3.3.0)
     bullet (8.0.8)
@@ -421,7 +421,7 @@ DEPENDENCIES
   annotate
   aws-sdk-s3
   bootsnap
-  brakeman
+  brakeman (~> 7.1.1)
   bullet
   cancancan
   database_cleaner-active_record
