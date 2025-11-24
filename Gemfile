@@ -59,7 +59,7 @@ group :development, :test do
   gem "debug", platforms: %i[mri windows], require: "debug/prelude"
 
   # Static security analysis
-  gem "brakeman", require: false
+  gem "brakeman", "~> 7.1.1", require: false
 
   # Code style checks
   gem "rubocop-rails-omakase", require: false
