@@ -6,13 +6,21 @@ class Api::V1::InventoryLocationsController < ApplicationController
         warehouse_id = params[:warehouse_id]
         if warehouse_id.present?
             sql = <<-SQL
-                SELECT#{' '}
-                    l.id,#{' '}
-                    l.storage_id,#{' '}
-                    COUNT(p.id) AS product_count,#{' '}
+                SELECT
+                    l.id,
+                    l.storage_id,
+                    COUNT(p.id) AS product_count,
                     SUM(s.quantity_on_hand) AS total_quantity
                 FROM inventory_locations l
-                LEFT JOIN inventory_summaries s ON l.id = s.inventory_location_id
+                LEFT JOIN (
+                    SELECT *
+                    FROM inventory_summaries
+                    WHERE id IN (
+                        SELECT MAX(id)
+                        FROM inventory_summaries
+                        GROUP BY product_id, inventory_location_id
+                    )
+                ) s ON l.id = s.inventory_location_id
                 LEFT JOIN products p ON s.product_id = p.id
                 WHERE l.warehouse_id = ?
                 GROUP BY l.id, l.storage_id
@@ -40,12 +48,16 @@ class Api::V1::InventoryLocationsController < ApplicationController
             FROM inventory_summaries s
             JOIN products p ON s.product_id = p.id
             JOIN inventory_statuses st ON s.inventory_status_id = st.id
-            WHERE s.inventory_location_id = ?
+            WHERE s.id IN (
+                SELECT MAX(id)
+                FROM inventory_summaries
+                WHERE inventory_location_id = ?
+                GROUP BY product_id
+            )
         SQL
         @inventory_details = ActiveRecord::Base.connection.exec_query(
             ActiveRecord::Base.send(:sanitize_sql_array, [ sql, @location.id ])
         )
-
         authorize @location
         render json: { location: @location, inventory_details: @inventory_details }, status: :ok
     rescue ActiveRecord::RecordNotFound
