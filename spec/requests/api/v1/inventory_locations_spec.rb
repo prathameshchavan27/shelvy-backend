@@ -67,4 +67,31 @@ RSpec.describe "API::V1::InventoryLocations", type: :request do
       end
     end
   end
+
+
+  describe "GET /api/v1/inventory_locations/:id/history" do
+    context "when location exists" do
+      it "returns inventory history for that location" do
+        get "/api/v1/inventory_locations/#{location1.id}/history", headers: auth_headers(user)
+
+        expect(response).to have_http_status(:ok)
+        json = JSON.parse(response.body)
+        puts "Response body: #{response.body}"
+        expect(json["history"]).to be_an(Array)
+        expect(json["history"].first["name"]).to eq("Laptop")
+        expect(json["history"].first["location"]).to eq("BIN-01")
+        expect(json["history"].first["history"]).to be_an(Array)
+      end
+    end
+
+    context "when location does not exist" do
+      it "returns not found" do
+        get "/api/v1/inventory_locations/999999/history", headers: auth_headers(user)
+
+        expect(response).to have_http_status(:not_found)
+        json = JSON.parse(response.body)
+        expect(json["error"]).to eq("Inventory Location not found")
+      end
+    end
+  end
 end

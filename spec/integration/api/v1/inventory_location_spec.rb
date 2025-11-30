@@ -87,4 +87,33 @@ RSpec.describe 'API::V1::InventoryLocations', type: :request do
       end
     end
   end
+
+  path '/api/v1/inventory_locations/{id}/history' do
+    get('Get inventory history for a location') do
+      tags 'InventoryLocations'
+      produces 'application/json'
+      security [ bearerAuth: [] ]
+      parameter name: :id, in: :path, type: :integer, description: 'Inventory Location ID'
+
+      response(200, 'successful') do
+        let(:Authorization) { auth_token }
+        let(:id) { location1.id }
+
+        run_test! do |response|
+          expect(response).to have_http_status(:ok)
+          # Further assertions can be added here once the history endpoint is implemented
+        end
+      end
+
+      response(404, 'not found') do
+        let(:Authorization) { auth_token }
+        let(:id) { 999 }
+        run_test! do |response|
+          expect(response).to have_http_status(:not_found)
+          json = JSON.parse(response.body)
+          expect(json["error"]).to eq("Inventory Location not found")
+        end
+      end
+    end
+  end
 end

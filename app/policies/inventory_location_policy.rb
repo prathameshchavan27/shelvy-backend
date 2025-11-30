@@ -7,6 +7,10 @@ class InventoryLocationPolicy < ApplicationPolicy
     user.present?
   end
 
+  def history?
+    user.present?
+  end
+
   class Scope < ApplicationPolicy::Scope
     # NOTE: Be explicit about which records you allow access to!
     def resolve

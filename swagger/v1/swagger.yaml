@@ -41,6 +41,25 @@ paths:
           description: successful
         '404':
           description: not found
+  "/api/v1/inventory_locations/{id}/history":
+    get:
+      summary: Get inventory history for a location
+      tags:
+      - InventoryLocations
+      security:
+      - bearerAuth: []
+      parameters:
+      - name: id
+        in: path
+        description: Inventory Location ID
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: successful
+        '404':
+          description: not found
   "/api/v1/products":
     get:
       summary: List all products
