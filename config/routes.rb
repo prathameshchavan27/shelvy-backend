@@ -18,6 +18,9 @@ Rails.application.routes.draw do
         collection do
           get "by_warehouse", to: "inventory_locations#inventory_locations_by_warehouse"
         end
+        member do
+          get "history", to: "inventory_locations#history"
+        end
       end
       resources :warehouses, only: [ :index, :show ]
     end

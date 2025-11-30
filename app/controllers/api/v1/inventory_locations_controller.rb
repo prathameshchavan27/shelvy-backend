@@ -1,5 +1,9 @@
+
 class Api::V1::InventoryLocationsController < ApplicationController
     before_action :authenticate_user!
+    before_action :setInventoryLocation, only: [ :show, :history ]
+
+    rescue_from ActiveRecord::RecordNotFound, with: :render_not_found
 
     def inventory_locations_by_warehouse
         authorize InventoryLocation
@@ -32,8 +36,6 @@ class Api::V1::InventoryLocationsController < ApplicationController
         else
             render json: { error: "warehouse_id parameter is required" }, status: :bad_request
         end
-    rescue ActiveRecord::RecordNotFound
-        render json: { error: "Warehouse not found" }, status: :not_found
     end
 
     def show
@@ -60,7 +62,50 @@ class Api::V1::InventoryLocationsController < ApplicationController
         )
         authorize @location
         render json: { location: @location, inventory_details: @inventory_details }, status: :ok
-    rescue ActiveRecord::RecordNotFound
+    end
+
+    def history
+        authorize InventoryLocation
+        products = Product.joins(:inventory_summaries).where(inventory_summaries: { inventory_location_id: @location.id }).distinct
+        history = products.map do |product|
+            summaries = InventorySummary.where(product: product, inventory_location: @location).order(id: :desc).limit(2)
+            {
+                name: product.name,
+                sku: product.sku,
+                history: summaries.map { |s|
+                    movement = InventoryMovement.where(inventory_summary: s, transfer_from: @location).order(id: :desc).first
+                    movement2 = InventoryMovement.where(inventory_summary: s, transfer_to: @location).order(id: :desc).first
+                    movement_info = if movement || movement2
+                        movement ||= movement2
+                        {
+                        quantity_moved: movement.quantity_moved,
+                        transfer_to: movement.transfer_to.storage_id,
+                        transfer_from: movement.transfer_from.storage_id,
+                        created_at: movement.created_at
+                        }
+                    else
+                        nil
+                    end
+                    {
+                        quantity_on_hand: s.quantity_on_hand,
+                        reserved_quantity: s.reserved_quantity,
+                        status: s.inventory_status.name,
+                        created_at: s.created_at,
+                        movement: movement_info
+                    }
+                },
+                location: @location.storage_id
+            }
+        end
+        render json: { history: history }, status: :ok
+    end
+
+    private
+    def setInventoryLocation
+        @location = InventoryLocation.find(params[:id])
+    end
+
+    def render_not_found
         render json: { error: "Inventory Location not found" }, status: :not_found
     end
 end
