@@ -22,6 +22,12 @@ Rails.application.routes.draw do
           get "history", to: "inventory_locations#history"
         end
       end
+      resources :inventory_transfers, only: [] do
+        collection do
+          get "locations_to_transfer", to: "inventory_transfers#locations_to_transfer"
+          post "transfer_inventory", to: "inventory_transfers#transfer_inventory"
+        end
+      end
       resources :warehouses, only: [ :index, :show ]
     end
   end
