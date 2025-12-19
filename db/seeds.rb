@@ -36,10 +36,10 @@ damaged = InventoryStatus.create!(name: "Damaged")
 puts "🏷️ Seeded statuses: Sellable, Unsellable, Damaged"
 
 # --- Products ---
-coffee = Product.create!(name: "Coffee", price: 10, created_by_user: user, inventory_location: bin1)
-tea = Product.create!(name: "Tea", price: 8, created_by_user: user, inventory_location: bin1)
-mug = Product.create!(name: "Mug", price: 5, created_by_user: user, inventory_location: bin1)
-notebook = Product.create!(name: "Notebook", price: 15, created_by_user: user, inventory_location: bin2)
+coffee = Product.create!(name: "Coffee", price: 10, created_by_user: user)
+tea = Product.create!(name: "Tea", price: 8, created_by_user: user)
+mug = Product.create!(name: "Mug", price: 5, created_by_user: user)
+notebook = Product.create!(name: "Notebook", price: 15, created_by_user: user)
 
 puts "☕ Created products: Coffee, Tea, Mug, Notebook"
 
@@ -50,8 +50,7 @@ coffee_tea_bundle = Product.create!(
   name: "B Coffee & Tea Bundle",
   is_bundle: true,
   price: coffee.price + tea.price,
-  created_by_user: user,
-  inventory_location: bin1
+  created_by_user: user
 )
 BundledProduct.create!(bundle: coffee_tea_bundle, component: coffee, quantity: 1)
 BundledProduct.create!(bundle: coffee_tea_bundle, component: tea, quantity: 1)
@@ -61,8 +60,7 @@ coffee_mug_bundle = Product.create!(
   name: "B2 Mug & Coffee",
   is_bundle: true,
   price: coffee.price + mug.price,
-  created_by_user: user,
-  inventory_location: bin2
+  created_by_user: user
 )
 BundledProduct.create!(bundle: coffee_mug_bundle, component: coffee, quantity: 1)
 BundledProduct.create!(bundle: coffee_mug_bundle, component: mug, quantity: 1)
@@ -72,8 +70,7 @@ tea_mug_bundle = Product.create!(
   name: "B2 Tea & Mug Bundle",
   is_bundle: true,
   price: tea.price + mug.price,
-  created_by_user: user,
-  inventory_location: bin2
+  created_by_user: user
 )
 BundledProduct.create!(bundle: tea_mug_bundle, component: tea, quantity: 1)
 BundledProduct.create!(bundle: tea_mug_bundle, component: mug, quantity: 1)
@@ -83,8 +80,7 @@ coffee_tea_mug_bundle = Product.create!(
   name: "B3 Tea, Coffee, Mug Bundle",
   is_bundle: true,
   price: coffee.price + tea.price + mug.price,
-  created_by_user: user,
-  inventory_location: bin2
+  created_by_user: user
 )
 BundledProduct.create!(bundle: coffee_tea_mug_bundle, component: coffee, quantity: 1)
 BundledProduct.create!(bundle: coffee_tea_mug_bundle, component: tea, quantity: 1)

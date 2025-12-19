@@ -60,6 +60,61 @@ paths:
           description: successful
         '404':
           description: not found
+  "/api/v1/inventory_transfers/locations_to_transfer":
+    get:
+      summary: Get locations to transfer inventory to
+      tags:
+      - InventoryTransfers
+      security:
+      - bearerAuth: []
+      parameters:
+      - name: warehouse_id
+        in: query
+        description: Warehouse ID
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: successful
+  "/api/v1/inventory_transfers/transfer_inventory":
+    post:
+      summary: Transfer inventory between locations
+      tags:
+      - InventoryTransfers
+      security:
+      - bearerAuth: []
+      parameters: []
+      responses:
+        '200':
+          description: successful
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                transfer_params:
+                  type: object
+                  properties:
+                    source_location_id:
+                      type: integer
+                    destination_location_id:
+                      type: integer
+                    items:
+                      type: object
+                      additionalProperties:
+                        type: object
+                        properties:
+                          quantity:
+                            type: integer
+                        required:
+                        - quantity
+                  required:
+                  - source_location_id
+                  - destination_location_id
+                  - items
+              required:
+              - transfer_params
   "/api/v1/products":
     get:
       summary: List all products
