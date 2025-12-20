@@ -11,14 +11,12 @@ RSpec.describe 'API::V1::Products', type: :request do
   path '/api/v1/products' do
     get('List all products') do
       tags 'Products'
+      consumes 'application/json'
       produces 'application/json'
       security [ bearerAuth: [] ]
 
-      parameter name: 'Accept', in: :header, type: :string, required: true, default: 'application/json'
-
       response(200, 'successful') do
         let(:Authorization) { auth_token }
-        let(:Accept) { 'application/json' }
         run_test!
       end
     end
@@ -27,15 +25,14 @@ RSpec.describe 'API::V1::Products', type: :request do
   path '/api/v1/products/{id}' do
     get('Show a product') do
       tags 'Products'
+      consumes 'application/json'
       produces 'application/json'
       security [ bearerAuth: [] ]
 
       parameter name: :id, in: :path, type: :string
-      parameter name: 'Accept', in: :header, type: :string, required: true
 
       response(200, 'successful') do
         let(:Authorization) { auth_token }
-        let(:Accept) { 'application/json' }
         let(:id) { Product.create!(name: 'Coffee', price: 10, created_by_user: admin).id }
 
         run_test!
@@ -43,7 +40,6 @@ RSpec.describe 'API::V1::Products', type: :request do
 
       response(404, 'not found') do
         let(:Authorization) { auth_token }
-        let(:Accept) { 'application/json' }
         let(:id) { '999' }
 
         run_test!

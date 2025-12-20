@@ -18,7 +18,11 @@ class Api::V1::ProductsController < ApplicationController
         authorize Product
         service = ProductCreator.new(product_params, current_user, params)
         result = service.call
-        render json: { product: result[:product] }, status: result[:status]
+        if result[:status] == :created
+            render json: { product: result[:product] }, status: result[:status]
+        else
+            render json: { message: result[:errors] }, status: result[:status]
+        end
     end
 
     def update
