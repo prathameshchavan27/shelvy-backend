@@ -8,11 +8,11 @@ RSpec.describe "Api::V1::Products", type: :request do
   let(:warehouse) { Warehouse.create!(name: "Main Warehouse", address: "123 Street") }
   let(:bin1) { InventoryLocation.create!(storage_id: "BIN-01", warehouse: warehouse, capacity: 100, unique_item_limits: 5) }
 
-  let!(:coffee) { Product.create!(name: "Coffee", price: 10, created_by_user: admin) }
-  let!(:tea) { Product.create!(name: "Tea", price: 8, created_by_user: admin) }
+  let!(:coffee) { Product.create!(name: "Coffee", brand: 'Test', price: 10, created_by_user: admin) }
+  let!(:tea) { Product.create!(name: "Tea", brand: 'Test', price: 8, created_by_user: admin) }
 
   # Bundle example
-  let!(:coffee_tea_bundle) { Product.create!(name: "Coffee & Tea Bundle", price: 17, is_bundle: true, created_by_user: admin) }
+  let!(:coffee_tea_bundle) { Product.create!(name: "Coffee & Tea Bundle", brand: "Test", price: 17, is_bundle: true, created_by_user: admin) }
   let!(:bundle_relation) { BundledProduct.create!(bundle: coffee_tea_bundle, component: coffee, quantity: 1) }
   let!(:bundle_relation2) { BundledProduct.create!(bundle: coffee_tea_bundle, component: tea, quantity: 1) }
 
@@ -89,6 +89,7 @@ RSpec.describe "Api::V1::Products", type: :request do
         {
           product: {
             name: "Diet Coke",
+            brand: 'Cola',
             price: 10
           }
         }.to_json
@@ -124,6 +125,7 @@ RSpec.describe "Api::V1::Products", type: :request do
         {
           product: {
             name: "Updated Coffee",
+            brand: "Test",
             price: 12
           }
         }.to_json
@@ -137,6 +139,7 @@ RSpec.describe "Api::V1::Products", type: :request do
         expect(response).to have_http_status(:ok)
         json = JSON.parse(response.body)
         expect(json["product"]["name"]).to eq("Updated Coffee")
+        expect(json["product"]["brand"]).to eq("Test")
         expect(json["product"]["price"]).to eq("12.0")
       end
 
