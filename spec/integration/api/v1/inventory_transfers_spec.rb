@@ -7,7 +7,7 @@ RSpec.describe Api::V1::InventoryTransfersController, type: :request do
   let(:warehouse) { Warehouse.create!(name: "Main Warehouse", address: "123 Warehouse St") }
   let(:location) { InventoryLocation.create!(storage_id: "BIN-01", warehouse: warehouse) }
   let(:sellable) { InventoryStatus.create!(name: "Sellable") }
-  let(:product) { Product.create!(name: "Sample Product", price: 20, created_by_user: user) }
+  let(:product) { Product.create!(name: "Sample Product", brand: "Pams", price: 20, created_by_user: user) }
   let(:inventory_summary1) { InventorySummary.create!(product: product, inventory_location: location, inventory_status: sellable, quantity_on_hand: 10, reserved_quantity: 0) }
   let(:inventory_summary2) { InventorySummary.create!(product: product, inventory_location: location, inventory_status: sellable, quantity_on_hand: 5, reserved_quantity: 0) }
   # -----------------------------

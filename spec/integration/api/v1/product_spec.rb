@@ -33,7 +33,7 @@ RSpec.describe 'API::V1::Products', type: :request do
 
       response(200, 'successful') do
         let(:Authorization) { auth_token }
-        let(:id) { Product.create!(name: 'Coffee', price: 10, created_by_user: admin).id }
+        let(:id) { Product.create!(name: 'Coffee', brand: 'Starbucks', price: 10, created_by_user: admin).id }
 
         run_test!
       end
@@ -62,9 +62,10 @@ RSpec.describe 'API::V1::Products', type: :request do
             type: :object,
             properties: {
               name: { type: :string },
+              brand: { type: :string },
               price: { type: :number }
             },
-            required: %w[name price]
+            required: %w[name brand price]
           }
         },
         required: [ 'product' ]
@@ -72,17 +73,18 @@ RSpec.describe 'API::V1::Products', type: :request do
 
       response(201, 'bundle created') do
         let(:Authorization) { auth_token }
-        let(:coffee) { Product.create!(name: "Coffee", price: 10, created_by_user: admin) }
-        let(:tea) { Product.create!(name: "Tea", price: 8, created_by_user: admin) }
+        let(:coffee) { Product.create!(name: "Coffee", brand: "Starbucks", price: 10, created_by_user: admin) }
+        let(:tea) { Product.create!(name: "Tea", brand: "Yogi", price: 8, created_by_user: admin) }
         let(:product) do
           {
             product: {
               name: 'Breakfast Combo',
+              brand: "House",
               price: 25,
               is_bundle: true,
               component_ids: [ coffee.id, tea.id ],
               components: [
-                { name: 'Muffin', price: 5 }
+                { name: 'Muffin', brand: "Test", price: 5 }
               ]
             }
           }
@@ -104,6 +106,7 @@ RSpec.describe 'API::V1::Products', type: :request do
           {
             product: {
               name: 'Coca Cola',
+              brand: 'Coke',
               price: 15
             }
           }
@@ -124,6 +127,7 @@ RSpec.describe 'API::V1::Products', type: :request do
           {
             product: {
               name: '',
+              brand: nil,
               price: nil
             }
           }
@@ -149,6 +153,7 @@ RSpec.describe 'API::V1::Products', type: :request do
             type: :object,
             properties: {
               name: { type: :string },
+              brand: { type: :string },
               price: { type: :number }
             }
           }
@@ -158,12 +163,13 @@ RSpec.describe 'API::V1::Products', type: :request do
 
       response(200, 'updated') do
         let(:Authorization) { auth_token }
-        let(:coffee) { Product.create!(name: "Coffee", price: 10, created_by_user: admin) }
+        let(:coffee) { Product.create!(name: "Coffee", brand: 'Test', price: 10, created_by_user: admin) }
         let(:id) { coffee.id }
         let(:product) do
           {
             product: {
               name: 'Updated Coffee',
+              brand: 'Star',
               price: 12
             }
           }

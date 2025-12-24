@@ -42,7 +42,7 @@ class Api::V1::ProductsController < ApplicationController
 
     def product_params
         # Only permit fields directly on Product
-        params.require(:product).permit(:name, :description, :price, :is_bundle)
+        params.require(:product).permit(:name, :brand, :description, :price, :is_bundle)
     end
 
 

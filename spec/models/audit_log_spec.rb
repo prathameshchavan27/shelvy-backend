@@ -7,7 +7,7 @@ RSpec.describe Product, type: :model do
   after  { Current.user = nil }
 
   it "creates an audit log on create" do
-    product = Product.create!(name: "Sprite", price: 10, created_by_user: user)
+    product = Product.create!(name: "Sprite", brand: 'Test', price: 10, created_by_user: user)
 
     log = AuditLog.last
     expect(log.action_type).to eq("CREATE")

@@ -42,6 +42,7 @@ RSpec.describe InventoryLocations::Transferer, type: :service do
   let!(:product) do
     Product.create!(
       name: "Coffee",
+      brand: 'Test',
       sku: "COF",
       price: 10,
       created_by_user: user
@@ -168,6 +169,7 @@ RSpec.describe InventoryLocations::Transferer, type: :service do
       let!(:other_product) do
         Product.create!(
           name: "Tea",
+          brand: 'Test',
           sku: "TEA",
           price: 5,
           created_by_user: user

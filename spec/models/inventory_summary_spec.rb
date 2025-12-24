@@ -4,7 +4,7 @@ RSpec.describe InventorySummary, type: :model do
   let(:warehouse) { Warehouse.create!(name: "Main Warehouse", address: "123 Warehouse St") }
   let(:user) { User.create!(name: "Tester", email: "tester@example.com", password: "password") }
   let(:inventory_location) { InventoryLocation.create!(storage_id: "AEC-01", warehouse: warehouse, capacity: 500, unique_item_limits: 12) }
-  let(:product) { Product.create!(name: "Test Product", price: 20.0, created_by_user: user) }
+  let(:product) { Product.create!(name: "Test Product", brand: 'Test', price: 20.0, created_by_user: user) }
   let(:status) { InventoryStatus.create!(name: "Sellable") }
 
   subject do

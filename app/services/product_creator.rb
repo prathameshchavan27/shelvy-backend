@@ -29,6 +29,7 @@ class ProductCreator
                 @extra_params[:product][:components].each do |comp_params|
                     new_component = Product.create!(
                     name: comp_params[:name],
+                    brand: comp_params[:brand],
                     price: comp_params[:price],
                     created_by_user: @user
                     )
@@ -48,6 +49,7 @@ class ProductCreator
         response_data = {
             id: @product.id,
             name: @product.name,
+            brand: @product.brand,
             price: @product.price,
             is_bundle: @product.is_bundle
         }

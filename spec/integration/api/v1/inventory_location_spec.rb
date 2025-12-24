@@ -11,7 +11,7 @@ RSpec.describe 'API::V1::InventoryLocations', type: :request do
   let!(:location1) { InventoryLocation.create!(storage_id: "BIN-01", warehouse: warehouse, capacity: 500) }
   let!(:location2) { InventoryLocation.create!(storage_id: "BIN-02", warehouse: warehouse, capacity: 300) }
 
-  let(:product) { Product.create!(name: "Test Product", price: 20.0, created_by_user: user) }
+  let(:product) { Product.create!(name: "Test Product", brand: "LV", price: 20.0, created_by_user: user) }
   let(:status) { InventoryStatus.create!(name: "Sellable") }
   let!(:inventory_summary) do
     InventorySummary.create!(

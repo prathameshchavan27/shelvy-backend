@@ -7,6 +7,7 @@ RSpec.describe Product, type: :model do
   subject do
     described_class.new(
       name: "Sample Product",
+      brand: "Test",
       description: "A sample product",
       price: 100.50,
       is_bundle: false,
@@ -53,6 +54,7 @@ RSpec.describe Product, type: :model do
     it "generates a unique 8-character SKU before validation" do
       product = described_class.create!(
         name: "Coffee",
+        brand: 'Test',
         price: 10,
         is_bundle: false,
         created_by_user: user
@@ -65,6 +67,7 @@ RSpec.describe Product, type: :model do
       # First product is created successfully
       first = described_class.create!(
         name: "Coffee",
+        brand: 'Test',
         price: 10,
         is_bundle: false,
         created_by_user: user
@@ -73,13 +76,14 @@ RSpec.describe Product, type: :model do
       # Second product with same name should fail
       second = described_class.new(
         name: "Coffee",
+        brand: 'Test',
         price: 15,
         is_bundle: false,
         created_by_user: user
       )
 
       expect(second).not_to be_valid
-      expect(second.errors[:base]).to include("Product with this name or SKU already exists")
+      expect(second.errors[:base]).to include("Product with this name and brand already exists")
     end
   end
 end
