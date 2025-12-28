@@ -14,6 +14,12 @@ Rails.application.routes.draw do
   namespace :api do
     namespace :v1 do
       resources :products, only: [ :index, :show, :create, :update ]
+      resources :unbundles, only: [] do
+        collection do
+          post "unbundle", to: "unbundles#unbundle_product"
+          get "bundles", to: "unbundles#bundles"
+        end
+      end
       resources :inventory_locations, only: [ :show ] do
         collection do
           get "by_warehouse", to: "inventory_locations#inventory_locations_by_warehouse"

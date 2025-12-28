@@ -62,7 +62,8 @@ class Api::V1::InventoryLocationsController < ApplicationController
                         quantity_moved: movement.quantity_moved,
                         transfer_to: movement.transfer_to.storage_id,
                         transfer_from: movement.transfer_from.storage_id,
-                        created_at: movement.created_at
+                        created_at: movement.created_at,
+                        bundle: movement.bundle ? { id: movement.bundle.id, name: movement.bundle.name } : nil
                         }
                     else
                         nil

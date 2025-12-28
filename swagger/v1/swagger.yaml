@@ -274,6 +274,43 @@ paths:
               required:
               - email
               - password
+  "/api/v1/inventory_locations/unbundle":
+    post:
+      summary: Unbundle a product into its components
+      tags:
+      - InventoryOperations
+      security:
+      - bearerAuth: []
+      parameters: []
+      responses:
+        '200':
+          description: successful
+        '422':
+          description: insufficient inventory
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                unbundle:
+                  type: object
+                  properties:
+                    bundle_product_id:
+                      type: integer
+                      description: ID of the bundle product
+                    inventory_location_id:
+                      type: integer
+                      description: ID of the location/bin
+                    quantity:
+                      type: integer
+                      description: Number of bundles to unpack
+                  required:
+                  - product_id
+                  - inventory_location_id
+                  - quantity
+              required:
+              - unbundle
   "/api/v1/warehouses":
     get:
       summary: List warehouses
