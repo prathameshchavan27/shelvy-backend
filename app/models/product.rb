@@ -8,6 +8,7 @@ class Product < ApplicationRecord
   validates :brand, presence: true
   validates :name, presence: true
   validates :price, numericality: { greater_than_or_equal_to: 0 }, unless: :is_bundle?
+  validates :case_pack_qty, presence: true, numericality: { greater_than_or_equal_to: 1 }
 
   has_many :bundled_products, foreign_key: :bundle_id, dependent: :destroy
   has_many :components, through: :bundled_products, source: :component

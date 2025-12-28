@@ -51,7 +51,8 @@ class ProductCreator
             name: @product.name,
             brand: @product.brand,
             price: @product.price,
-            is_bundle: @product.is_bundle
+            is_bundle: @product.is_bundle,
+            case_pack_qty: @product.case_pack_qty
         }
 
         # Include components only if it's a bundle
