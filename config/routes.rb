@@ -20,6 +20,14 @@ Rails.application.routes.draw do
           get "bundles", to: "unbundles#bundles"
         end
       end
+      resources :bundles, only: [] do
+        member do
+          get "bundling_availability", to: "bundles#bundling_availability"
+        end
+        collection do
+          post "bundle_inventory", to: "bundles#bundle_inventory"
+        end
+      end
       resources :inventory_locations, only: [ :show ] do
         collection do
           get "by_warehouse", to: "inventory_locations#inventory_locations_by_warehouse"
