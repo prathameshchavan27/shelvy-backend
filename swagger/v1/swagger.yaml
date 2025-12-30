@@ -4,6 +4,80 @@ info:
   title: API V1
   version: v1
 paths:
+  "/api/v1/bundles/{id}/bundling_availability":
+    get:
+      summary: Get maximum possible bundles based on component stock in single bins
+      tags:
+      - Inventory Transformations
+      security:
+      - bearerAuth: []
+      parameters:
+      - name: id
+        in: path
+        description: ID of the Bundle Product
+        required: true
+        schema:
+          type: integer
+      - name: warehouse_id
+        in: query
+        description: ID of the Warehouse to check
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: successful
+        '404':
+          description: bundle not found
+  "/api/v1/bundles/bundle_inventory":
+    post:
+      summary: Execute Bundling Transformation
+      tags:
+      - Inventory Transformations
+      security:
+      - bearerAuth: []
+      parameters: []
+      responses:
+        '200':
+          description: successful
+        '422':
+          description: failed transaction
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                bundle:
+                  type: object
+                  properties:
+                    bundle_product_id:
+                      type: integer
+                    destination_location_id:
+                      type: integer
+                    quantity_to_create:
+                      type: integer
+                    components:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          product_id:
+                            type: integer
+                          inventory_location_id:
+                            type: integer
+                          quantity_per_bundle:
+                            type: integer
+                        required:
+                        - product_id
+                        - inventory_location_id
+                        - quantity_per_bundle
+                  required:
+                  - bundle_product_id
+                  - destination_location_id
+                  - quantity_to_create
+                  - components
+              required:
+              - bundle
   "/api/v1/inventory_locations/by_warehouse":
     get:
       summary: Get inventory locations by warehouse
@@ -274,11 +348,11 @@ paths:
               required:
               - email
               - password
-  "/api/v1/inventory_locations/unbundle":
+  "/api/v1/unbundles/unbundle":
     post:
       summary: Unbundle a product into its components
       tags:
-      - InventoryOperations
+      - Inventory Transformations
       security:
       - bearerAuth: []
       parameters: []
