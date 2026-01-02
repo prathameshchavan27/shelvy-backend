@@ -19,6 +19,10 @@ class ProductPolicy < ApplicationPolicy
     user.admin?
   end
 
+  def lookup?
+    user.present?
+  end
+
   class Scope < Scope
     def resolve
       scope.all

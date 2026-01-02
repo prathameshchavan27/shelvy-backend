@@ -134,6 +134,22 @@ paths:
           description: successful
         '404':
           description: not found
+  "/api/v1/inventory_locations/available_capacity":
+    get:
+      summary: Get available capacity for all inventory locations
+      tags:
+      - InventoryLocations
+      security:
+      - bearerAuth: []
+      parameters:
+      - name: warehouse_id
+        in: query
+        description: Warehouse ID
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: successful
   "/api/v1/inventory_transfers/locations_to_transfer":
     get:
       summary: Get locations to transfer inventory to
@@ -283,6 +299,58 @@ paths:
                       type: number
               required:
               - product
+  "/api/v1/products/lookup":
+    get:
+      summary: Lookup a product by barcode
+      tags:
+      - Products
+      security:
+      - bearerAuth: []
+      parameters:
+      - name: barcode
+        in: query
+        description: Product Barcode
+        schema:
+          type: string
+      responses:
+        '200':
+          description: successful
+        '404':
+          description: not found
+  "/api/v1/receivings/receive_inventory":
+    post:
+      summary: Receive inventory
+      tags:
+      - Receiving
+      security:
+      - bearerAuth: []
+      parameters: []
+      responses:
+        '200':
+          description: successful
+        '422':
+          description: unprocessable entity
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                receiving:
+                  type: object
+                  properties:
+                    product_id:
+                      type: integer
+                    location_id:
+                      type: integer
+                    quantity:
+                      type: integer
+                  required:
+                  - product_id
+                  - location_id
+                  - quantity
+              required:
+              - receiving
   "/api/v1/signup":
     post:
       summary: Registers a new user

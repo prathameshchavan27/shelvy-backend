@@ -8,6 +8,7 @@ class InventoryMovement < ApplicationRecord
   validates :inventory_summary, presence: true
   validates :quantity_moved, numericality: { only_integer: true, greater_than: 0 }
   validate :at_least_one_location_present
+  validates :description, length: { maximum: 255 }, allow_nil: true
 
   def at_least_one_location_present
     if transfer_from.nil? && transfer_to.nil?

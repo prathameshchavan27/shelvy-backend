@@ -38,6 +38,14 @@ class Api::V1::ProductsController < ApplicationController
         end
     end
 
+    def lookup
+        authorize Product
+        product = Product.find_by!(barcode: params[:barcode])
+        render json: product, status: :ok
+    rescue ActiveRecord::RecordNotFound
+        render json: { error: "Product with barcode #{params[:barcode]} not found" }, status: :not_found
+    end
+
     private
 
     def product_params

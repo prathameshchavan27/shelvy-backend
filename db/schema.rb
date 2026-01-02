@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_12_26_103639) do
+ActiveRecord::Schema[7.2].define(version: 2026_01_01_103756) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -54,6 +54,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_12_26_103639) do
     t.integer "bundle_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "description"
     t.index ["inventory_summary_id"], name: "index_inventory_movements_on_inventory_summary_id"
   end
 
@@ -89,6 +90,8 @@ ActiveRecord::Schema[7.2].define(version: 2025_12_26_103639) do
     t.datetime "updated_at", null: false
     t.string "brand", null: false
     t.integer "case_pack_qty", default: 1, null: false
+    t.string "barcode", null: false
+    t.index ["barcode"], name: "index_products_on_barcode", unique: true
     t.index ["created_by_user_id"], name: "index_products_on_created_by_user_id"
     t.index ["sku"], name: "index_products_on_sku", unique: true
   end

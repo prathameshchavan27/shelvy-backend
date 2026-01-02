@@ -185,4 +185,36 @@ RSpec.describe 'API::V1::Products', type: :request do
       end
     end
   end
+
+  path '/api/v1/products/lookup' do
+    get('Lookup a product by barcode') do
+      tags 'Products'
+      consumes 'application/json'
+      produces 'application/json'
+      security [ bearerAuth: [] ]
+
+      parameter name: :barcode, in: :query, type: :string, description: 'Product Barcode'
+
+      response(200, 'successful') do
+        let(:Authorization) { auth_token }
+        let(:product) { Product.create!(name: 'Coffee', brand: 'Starbucks', price: 10, created_by_user: admin) }
+        let(:barcode) { product.barcode }
+
+        run_test! do |response|
+          expect(response).to have_http_status(:ok)
+          json = JSON.parse(response.body)
+          puts "Response body Lookup: #{response.body}"
+          expect(json['id']).to eq(product.id)
+          expect(json['name']).to eq('Coffee')
+        end
+      end
+
+      response(404, 'not found') do
+        let(:Authorization) { auth_token }
+        let(:barcode) { 'NONEXISTENT' }
+
+        run_test!
+      end
+    end
+  end
 end

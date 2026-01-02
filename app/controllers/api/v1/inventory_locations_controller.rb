@@ -63,7 +63,8 @@ class Api::V1::InventoryLocationsController < ApplicationController
                         transfer_to: movement.transfer_to&.storage_id,
                         transfer_from: movement.transfer_from&.storage_id,
                         created_at: movement.created_at,
-                        bundle: movement.bundle ? { id: movement.bundle.id, name: movement.bundle.name } : nil
+                        bundle: movement.bundle ? { id: movement.bundle.id, name: movement.bundle.name } : nil,
+                        description: movement.description
                         }
                     else
                         nil
@@ -80,6 +81,42 @@ class Api::V1::InventoryLocationsController < ApplicationController
             }
         end
         render json: { history: history }, status: :ok
+    end
+
+    def available_capacity
+        authorize InventoryLocation
+        sql = <<-SQL
+            SELECT
+                l.id,
+                l.storage_id,
+                COUNT(p.id) AS product_count,
+                SUM(s.quantity_on_hand) AS total_quantity
+            FROM inventory_locations l
+            LEFT JOIN (
+                SELECT *
+                FROM inventory_summaries
+                WHERE id IN (
+                    SELECT MAX(id)
+                    FROM inventory_summaries
+                    GROUP BY product_id, inventory_location_id
+                )
+            ) s ON l.id = s.inventory_location_id
+            LEFT JOIN products p ON s.product_id = p.id
+            WHERE l.warehouse_id = ?
+            GROUP BY l.id, l.storage_id
+        SQL
+        @locations = ActiveRecord::Base.connection.exec_query(
+            ActiveRecord::Base.send(:sanitize_sql_array, [ sql, params[:warehouse_id] ])
+        )
+        capacity = @locations.map do |loc|
+            location = InventoryLocation.find(loc["id"])
+            {
+                id: loc["id"],
+                storage_id: loc["storage_id"],
+                available_capacity: location.capacity - (loc["total_quantity"] || 0)
+            }
+        end
+        render json: { capacity: capacity }, status: :ok
     end
 
     private

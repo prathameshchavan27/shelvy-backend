@@ -116,4 +116,26 @@ RSpec.describe 'API::V1::InventoryLocations', type: :request do
       end
     end
   end
+
+  path '/api/v1/inventory_locations/available_capacity' do
+    get('Get available capacity for all inventory locations') do
+      tags 'InventoryLocations'
+      produces 'application/json'
+      security [ bearerAuth: [] ]
+      parameter name: :warehouse_id, in: :query, type: :integer, description: 'Warehouse ID'
+
+      response(200, 'successful') do
+        let(:Authorization) { auth_token }
+        let(:warehouse_id) { warehouse.id }
+        run_test! do |response|
+          expect(response).to have_http_status(:ok)
+          json = JSON.parse(response.body)
+          expect(json["capacity"].length).to eq(2)
+          expect(json["capacity"].first).to have_key('id')
+          expect(json["capacity"].first).to have_key('storage_id')
+          expect(json["capacity"].first).to have_key('available_capacity')
+        end
+      end
+    end
+  end
 end
