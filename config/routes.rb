@@ -13,7 +13,11 @@ Rails.application.routes.draw do
 
   namespace :api do
     namespace :v1 do
-      resources :products, only: [ :index, :show, :create, :update ]
+      resources :products, only: [ :index, :show, :create, :update ] do
+        collection do
+          get "lookup", to: "products#lookup"
+        end
+      end
       resources :unbundles, only: [] do
         collection do
           post "unbundle", to: "unbundles#unbundle_product"
@@ -31,9 +35,15 @@ Rails.application.routes.draw do
       resources :inventory_locations, only: [ :show ] do
         collection do
           get "by_warehouse", to: "inventory_locations#inventory_locations_by_warehouse"
+          get "available_capacity", to: "inventory_locations#available_capacity"
         end
         member do
           get "history", to: "inventory_locations#history"
+        end
+      end
+      resources :receivings, only: [] do
+        collection do
+          post "receive_inventory", to: "receivings#receive_inventory"
         end
       end
       resources :inventory_transfers, only: [] do

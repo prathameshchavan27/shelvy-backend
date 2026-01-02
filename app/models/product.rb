@@ -2,6 +2,7 @@ require "digest"
 class Product < ApplicationRecord
   include Auditable
   before_validation :generate_sku, on: :create
+  before_validation :generate_barcode, on: :create
   belongs_to :created_by_user, class_name: "User"
 
   validates :sku, presence: true, uniqueness: true
@@ -9,6 +10,7 @@ class Product < ApplicationRecord
   validates :name, presence: true
   validates :price, numericality: { greater_than_or_equal_to: 0 }, unless: :is_bundle?
   validates :case_pack_qty, presence: true, numericality: { greater_than_or_equal_to: 1 }
+  validates :barcode, presence: true, uniqueness: true
 
   has_many :bundled_products, foreign_key: :bundle_id, dependent: :destroy
   has_many :components, through: :bundled_products, source: :component
@@ -53,5 +55,11 @@ class Product < ApplicationRecord
       throw(:abort)
     end
     self.sku = generated_sku
+  end
+
+  def generate_barcode
+    return if barcode.present?
+    # Generates a 12-digit numeric barcode from a hash of the name/brand
+    self.barcode = Digest::SHA256.hexdigest("#{brand}#{name}#{Time.now.to_i}").to_i(16).to_s.first(12)
   end
 end
