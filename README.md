@@ -328,6 +328,12 @@ The OpenAPI specification file is located at `swagger/v1/swagger.yaml`.
 
 ---
 
+## Related Repositories
+This project is part of the Shelvy Warehouse Ecosystem:
+*   [Shelvy Frontend](https://github.com/prathameshchavan27/shelvy-frontend) - User Interface and Dashboard.
+
+---
+
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
