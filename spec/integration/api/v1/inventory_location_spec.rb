@@ -78,7 +78,7 @@ RSpec.describe 'API::V1::InventoryLocations', type: :request do
 
       response(404, 'not found') do
         let(:Authorization) { auth_token }
-        let(:id) { 999 }
+        let(:id) { InventoryLocation.maximum(:id).to_i + 1 }
         run_test! do |response|
           expect(response).to have_http_status(:not_found)
           json = JSON.parse(response.body)
@@ -107,7 +107,7 @@ RSpec.describe 'API::V1::InventoryLocations', type: :request do
 
       response(404, 'not found') do
         let(:Authorization) { auth_token }
-        let(:id) { 999 }
+        let(:id) { InventoryLocation.maximum(:id).to_i + 1 }
         run_test! do |response|
           expect(response).to have_http_status(:not_found)
           json = JSON.parse(response.body)
