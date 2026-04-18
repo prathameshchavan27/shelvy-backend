@@ -36,7 +36,7 @@ RSpec.describe "User Sessions", type: :request do
                 post "/api/v1/login", params: invalid_params
 
                 expect(response).to have_http_status(:unauthorized)
-                expect(response.body).to eq("Invalid Email or password.")   # just check the text
+                expect(response.body.strip).to eq("Invalid email or password.")
             end
         end
     end
