@@ -21,7 +21,9 @@ gem "jsonapi-serializer"    # JSON serialization for Devise
 gem "cancancan"          # Authorization (role-based permissions)
 
 # Background Jobs (Sidekiq)
-gem "sidekiq"
+# Sidekiq 8 can pull connection_pool 3.x which has parser issues in some CI Ruby setups.
+gem "sidekiq", "~> 7.3"
+gem "connection_pool", "< 3.0"
 
 # File Uploads (Active Storage with S3, optional)
 gem "aws-sdk-s3", require: false
@@ -59,7 +61,7 @@ group :development, :test do
   gem "debug", platforms: %i[mri windows], require: "debug/prelude"
 
   # Static security analysis
-  gem "brakeman", "~> 7.1.1", require: false
+  gem "brakeman", "~> 8.0.4", require: false
 
   # Code style checks
   gem "rubocop-rails-omakase", require: false
