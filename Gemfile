@@ -14,11 +14,13 @@ gem "puma", ">= 5.0"
 # CORS for API requests (needed for React frontend)
 gem "rack-cors"
 
+# Rate limiting and throttling
+gem "rack-attack"
+
 # Authentication & Authorization
 gem "devise"             # For authentication
 gem "devise-jwt"         # JWT-based auth for API-only apps
-gem "jsonapi-serializer"    # JSON serialization for Devise
-gem "cancancan"          # Authorization (role-based permissions)
+gem "jsonapi-serializer" # JSON serialization for Devise
 
 # Background Jobs (Sidekiq)
 # Sidekiq 8 can pull connection_pool 3.x which has parser issues in some CI Ruby setups.
@@ -48,6 +50,9 @@ gem "tzinfo-data", platforms: %i[windows jruby]
 
 # Performance boost
 gem "bootsnap", require: false
+
+# Structured logging for production
+gem "lograge"
 
 gem "pundit"
 

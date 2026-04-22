@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  get "/health", to: "health#show"
+
   mount Rswag::Ui::Engine => "/api-docs"
   mount Rswag::Api::Engine => "/api-docs"
 

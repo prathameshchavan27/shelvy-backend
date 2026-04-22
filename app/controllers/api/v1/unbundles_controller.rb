@@ -2,11 +2,13 @@ class Api::V1::UnbundlesController < ApplicationController
   before_action :authenticate_user!
 
   def bundles
+    authorize :bundle, :bundles?
     @products = Product.where(is_bundle: true).includes(:components).select(:id, :name, :sku, :case_pack_qty).order(:name)
     render json: { bundles: @products }, status: :ok
   end
 
   def unbundle_product
+    authorize :bundle, :unbundle_product?
     if InventoryLocations::Bundles::Unbundler.new(unbundle_params, current_user).call
         render json: { message: "successfully unbundled" }, status: :ok
     else

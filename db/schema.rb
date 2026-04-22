@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2026_01_01_103756) do
+ActiveRecord::Schema[7.2].define(version: 2026_01_28_000001) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -22,6 +22,8 @@ ActiveRecord::Schema[7.2].define(version: 2026_01_01_103756) do
     t.jsonb "change_log"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["created_at"], name: "index_audit_logs_on_created_at"
+    t.index ["object_type", "object_id"], name: "idx_audit_logs_object"
     t.index ["user_id"], name: "index_audit_logs_on_user_id"
   end
 
@@ -43,6 +45,7 @@ ActiveRecord::Schema[7.2].define(version: 2026_01_01_103756) do
     t.bigint "warehouse_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["warehouse_id", "storage_id"], name: "idx_inventory_locations_warehouse_storage"
     t.index ["warehouse_id"], name: "index_inventory_locations_on_warehouse_id"
   end
 
@@ -56,6 +59,8 @@ ActiveRecord::Schema[7.2].define(version: 2026_01_01_103756) do
     t.datetime "updated_at", null: false
     t.string "description"
     t.index ["inventory_summary_id"], name: "index_inventory_movements_on_inventory_summary_id"
+    t.index ["transfer_from_id"], name: "index_inventory_movements_on_transfer_from_id"
+    t.index ["transfer_to_id"], name: "index_inventory_movements_on_transfer_to_id"
   end
 
   create_table "inventory_statuses", force: :cascade do |t|
@@ -73,8 +78,10 @@ ActiveRecord::Schema[7.2].define(version: 2026_01_01_103756) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "inventory_status_id", null: false
+    t.index ["created_at"], name: "index_inventory_summaries_on_created_at"
     t.index ["inventory_location_id"], name: "index_inventory_summaries_on_inventory_location_id"
     t.index ["inventory_status_id"], name: "index_inventory_summaries_on_inventory_status_id"
+    t.index ["product_id", "inventory_location_id", "inventory_status_id"], name: "idx_inventory_summaries_product_location_status"
     t.index ["product_id"], name: "index_inventory_summaries_on_product_id"
   end
 
