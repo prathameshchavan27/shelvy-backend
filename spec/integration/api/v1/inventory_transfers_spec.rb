@@ -2,7 +2,7 @@ require 'rails_helper'
 require 'swagger_helper'
 
 RSpec.describe Api::V1::InventoryTransfersController, type: :request do
-  let(:user) { User.create!(name: "Manager", email: "manager@example.com", password: "password") }
+  let(:user) { User.create!(name: "Manager", email: "manager@example.com", password: "password", role: :manager) }
   let(:auth_token) { auth_headers(user)["Authorization"] }
   let(:warehouse) { Warehouse.create!(name: "Main Warehouse", address: "123 Warehouse St") }
   let(:location) { InventoryLocation.create!(storage_id: "BIN-01", warehouse: warehouse) }

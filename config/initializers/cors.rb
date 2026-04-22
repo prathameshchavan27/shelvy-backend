@@ -7,11 +7,18 @@
 
 Rails.application.config.middleware.insert_before 0, Rack::Cors do
   allow do
-    origins ENV.fetch("CORS_ORIGINS", "*").split(",")
+    # IMPORTANT: Set CORS_ORIGINS in production (e.g., "https://app.example.com")
+    # Never use "*" in production as it allows requests from any origin
+    if Rails.env.production?
+      origins ENV.fetch("CORS_ORIGINS") { raise "CORS_ORIGINS must be set in production" }.split(",")
+    else
+      origins ENV.fetch("CORS_ORIGINS", "http://localhost:3000,http://localhost:5173").split(",")
+    end
 
     resource "*",
       headers: :any,
-      expose: [ "Authorization" ],
-      methods: [ :get, :post, :put, :patch, :delete, :options, :head ]
+      expose: ["Authorization"],
+      methods: [:get, :post, :put, :patch, :delete, :options, :head],
+      max_age: 86400
   end
 end

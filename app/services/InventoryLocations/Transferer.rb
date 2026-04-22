@@ -13,14 +13,12 @@ module InventoryLocations
       ActiveRecord::Base.transaction do
         @payload.each do |inventory_summary_id, inner_hash|
             detail = @source_inventory.find { |d| d["inventory_summary_id"] == inventory_summary_id.to_i }
-            puts "Source Detail found: #{detail.inspect}"
             detail2 = @destination_inventory.find { |d| d["inventory_summary_id"] == inventory_summary_id.to_i }
             next unless detail
             quantity_moved = [ inner_hash["quantity"].to_i, detail["quantity_on_hand"] ].min
             next if quantity_moved <= 0
-            # Update source location summary
+
             source = source_location_summary(detail, quantity_moved)
-            puts "Source Summary created: #{source.inspect}"
             Rails.logger.info("Source Summary created: #{source.inspect}")
             # Update destination location summary
             destination = destination_location_summary(detail2.present? ? detail2 : detail, quantity_moved, detail2.present? ? 1 : 0)

@@ -2,6 +2,7 @@ class Api::V1::BundlesController < ApplicationController
   before_action :authenticate_user!
 
   def bundling_availability
+    authorize :bundle, :bundling_availability?
     bundle = Product.find(params[:id])
     warehouse_id = params[:warehouse_id]
 
@@ -35,6 +36,7 @@ class Api::V1::BundlesController < ApplicationController
   end
 
   def bundle_inventory
+    authorize :bundle, :bundle_inventory?
     service = InventoryLocations::Bundles::Bundler.new(bundle_params)
 
     if service.call
